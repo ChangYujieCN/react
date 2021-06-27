@@ -114,22 +114,22 @@ function FiberNode(
   key: null | string,
   mode: TypeOfMode,
 ) {
-  // Instance
-  this.tag = tag;
-  this.key = key;
-  this.elementType = null;
-  this.type = null;
-  this.stateNode = null;
+  // Instance 静态属性
+  this.tag = tag;  // fiber对应的组件类型 class/function/host component  hostComponent指dom节点对应的fiber节点
+  this.key = key;  // 就是常用的key属性
+  this.elementType = null; // 大部分情况下 elementType和type相同  某些情况下 function component使用memo包裹后,两者不同,
+  this.type = null;    // type对于function component是函数本身  对于class component是class 对于host component是dom节点的tagName
+  this.stateNode = null; // 对于host component来说是它对应的真实dom节点
 
   // Fiber
-  this.return = null;
+  this.return = null;  //指向父节点
   this.child = null;
-  this.sibling = null;
-  this.index = 0;
+  this.sibling = null;  // 这三个属性会将fiber组成一个fiber树
+  this.index = 0; // 对于多个同级的fiber节点  代表他们插入dom的位置索引
 
-  this.ref = null;
-
-  this.pendingProps = pendingProps;
+  this.ref = null;  // 常用
+  // 保存本次更新造成的状态改变相关信息
+  this.pendingProps = pendingProps;   // 从这里开始
   this.memoizedProps = null;
   this.updateQueue = null;
   this.memoizedState = null;
@@ -137,15 +137,15 @@ function FiberNode(
 
   this.mode = mode;
 
-  // Effects
-  this.flags = NoFlags;
+  // Effects // 保存本次更新会造成的DOM操作
+  this.flags = NoFlags;     // 副作用相关  对于hostcomponent,副作用包括dom节点增删查改 对于function component 副作用包括代表useEffect useLayoutEffect
   this.subtreeFlags = NoFlags;
   this.deletions = null;
 
-  this.lanes = NoLanes;
-  this.childLanes = NoLanes;
-
-  this.alternate = null;
+  this.lanes = NoLanes;  // 两个lane属性与优先级调度有关   Scheduler 相关
+  this.childLanes = NoLanes;  
+  // altername 关系到fiber的工作方式
+  this.alternate = null;   // 到这里结束  都是将fiber作为动态的工作单元使用的时候的属性
 
   if (enableProfilerTimer) {
     // Note: The following is done to avoid a v8 performance cliff.
